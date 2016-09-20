@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lucca Chat Room</title>
+    <script src="app/lib/angular.min.js"></script>
+    <script src="app/lib/angular-animate.min.js"></script>
+    <script src="app/lib/angular-touch.min.js"></script>
+    <link href="app/style/bootstrap.min.css" rel="stylesheet">
+    <link href="app/style/style.css" rel="stylesheet">
+    <script src="app/lib/ui-bootstrap-tpls-2.1.3.min.js"></script>
+
+    <script src="app/app.js"></script>
+    <script src="app/controllers/chatRoom.ctrl.js"></script>
+    <script src="app/filters/initials.filter.js"></script>
+<body>
+    <div class="jumbotron">
+        <div class="text-center">
+            <h1>Lucca chat room</h1>
+        </div>
+    </div>
+    <div class="container" ng-app="LuccaChatRoom" ng-controller="ChatRoomCtrl">
+        <div class="container">
+            <div class="row chatRoom">
+                <ul class="list-unstyled">
+                    <li ng-repeat="message in messages">
+                        <div class="message" ng-style="{'float': message.userIndex == selectedUser ? 'right' : 'left'}">
+                            <div class="message-body"  ng-style="{'border-color': users[message.userIndex].color}">
+                                <p class="user">{{ users[message.userIndex].name }}</p>
+                                <p>{{ message.text }}</p>
+                            </div>
+                            <span class="message-date">
+                                {{ message.date | date: 'medium'}}
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <ul class="list-inline">
+                    <li ng-repeat="user in users">
+                        <div class="userIcon" ng-style="{'background-color': user.color, 'opacity': (selectedUser == $index) ? 1 : 0.5}" ng-click="setUser($index)">
+                            {{ (selectedUser == $index) ? (user.name | uppercase) : (user.name | initials) }}
+                        </div>
+                    </li>
+                    <li>
+                        <div class="userIcon bg-primary" ng-click="addUser()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="writing-area" ng-style="{'border-color': users[selectedUser].color}">
+                    <form name="messageForm" ng-submit="send()">
+                        <div class="form-group">
+                            <label for="messageInput">Message</label>
+                            <textarea class="form-control" id="messageInput" ng-model="message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-default">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
